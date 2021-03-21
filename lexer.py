@@ -3,27 +3,29 @@ from reader import Reader
 def Lexer(script):
     alltoken = []
     r = Reader(script)
-    def totoken(curr, futu):
+    def inner(curr, futu):
         if(curr in " /n"): pass
         else: 
             alltoken.append(token(curr,r))
         if(r.futu != None): 
             r.tofutu()
-            return totoken(r.curr, r.futu)
+            return inner(r.curr, r.futu)
         else: 
             return alltoken
-    return totoken(r.curr, r.futu)
+    return inner(r.curr, r.futu)
 def token(curr,r):
+      given = ['A']
       v = str(curr)
-      if   curr in "({":     t = 'lll'
-      elif curr in ")}":     t = 'rrr'
+      if   curr in "({[":     t = 'lll'
+      elif curr in ")}]":     t = 'rrr'
       elif curr in "+-*/%,:=": t = 'op'
       elif curr in ";":      t = 'end'
       #elif re.match(r'//.*', curr): #add comment
       #    t,v = 'com', find(r,r'//.*','com')
       elif re.match("[_a-zA-Z]", curr):
-          t,v = "func",find(r, "\w", 'func')
-
+          v = find(r, "\w", 'func')
+          if(v in given): t = 'given'
+          else: t = 'func'
       elif curr in ("'", '"'): 
           t,v = 'str',find(r, "\w", 'str')
 
