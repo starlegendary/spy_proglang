@@ -1,2 +1,7 @@
-A = x: x+'123'+ 12.5;
-A(1);
+{  :'Hello World';};
+#print () hello world function#
+ls = {
+  '0':'12.1';
+  _:'23.2' == '2'-> '3';
+};
+aaa

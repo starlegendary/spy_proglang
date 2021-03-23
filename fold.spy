@@ -1,0 +1,9 @@
+fold = {
+  (f,i): inner(i);
+  inner = {
+    (0): 0;
+    (i): add(inner(i-1), f(i)) 
+  };
+};
+
+aaa

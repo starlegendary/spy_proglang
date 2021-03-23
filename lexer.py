@@ -1,42 +1,58 @@
 import re
-from reader import Reader
-def Lexer(script):
-    alltoken = []
-    r = Reader(script)
-    def inner(curr, futu):
-        if(curr in " /n"): pass
-        else: 
-            alltoken.append(token(curr,r))
-        if(r.futu != None): 
-            r.tofutu()
-            return inner(r.curr, r.futu)
-        else: 
-            return alltoken
-    return inner(r.curr, r.futu)
-def token(curr,r):
-      given = ['A']
-      v = str(curr)
-      if   curr in "({[":     t = 'lll'
-      elif curr in ")}]":     t = 'rrr'
-      elif curr in "+-*/%,:=": t = 'op'
-      elif curr in ";":      t = 'end'
-      #elif re.match(r'//.*', curr): #add comment
-      #    t,v = 'com', find(r,r'//.*','com')
-      elif re.match("[_a-zA-Z]", curr):
-          v = find(r, "\w", 'func')
-          if(v in given): t = 'given'
-          else: t = 'func'
-      elif curr in ("'", '"'): 
-          t,v = 'str',find(r, "\w", 'str')
 
-      elif re.match(r'^\d*[.]?\d*$', curr): 
-          t,v = "num",find(r, r'^\d*[.]?\d*$','num')
-      return (t,v)
-def find(r, allowed, type_):
-    if(type_ == 'str'): r.tofutu()
-    result, futu =  r.curr, r.futu
-    while futu is not None and re.match(allowed, futu):
-        curr, futu = r.tofutu()
-        result += curr
-    if(type_ == 'str'): r.tofutu()
-    return result
+def eq(cond, sth1 = True):
+    if type(cond) == bool: return lambda x: cond 
+    return lambda x: (x == cond) == sth1
+
+def has(cond, sth = True): 
+    return lambda x: (x in cond) == sth
+
+def match(cond, sth = True): 
+    return lambda x: bool(re.match(cond,x)) == sth
+
+def Lexer(r):
+    alltoken = []
+    stop = True
+
+    while(stop != None):
+
+        #comment
+        if r.p[1] == '#': 
+            r.movetil(1,eq('#'))
+        #remove space and nextline
+        elif has(' \n')(r.p[1]):
+            stop = r.movetil(1,has(' \n', False))
+            continue
+        #check default symbol
+        elif has('_()[]{}')(r.p[1]):
+            alltoken.append((r.p[1],''))
+        #check default seperator
+        elif has(',;')(r.p[1]):
+            alltoken.append(('sep',r.p[1]))
+        #check default operation
+        elif has(':=')(r.p[1]):
+            alltoken.append(('op',r.p[1]))
+        #check default double operation ->
+        elif r.p[1] == '-':
+            r.move(1)
+            if(r.p[1] == '>'):
+                alltoken.append(('op','->'))
+                r.move(1)
+            else:
+                raise Exception ('Does not recognize -')
+        #check for functions
+        elif match("[_a-zA-Z]")(r.p[1]):
+            stop = r.movetil(1, match("[_a-zA-Z]", False), eq(True))
+            alltoken.append(('fun', r.clear()))
+            continue
+        #check for objects
+        elif has(("'", '"'))(r.p[1]):
+            r.move(1, eq(False))
+            r.movetil(1, has(("'", '"'), True), eq(True))
+            alltoken.append(('obj', r.clear()))
+            
+        else:
+            raise Exception ('Cannot recognize', r.p[1])
+        stop = r.move(1)
+
+    return alltoken

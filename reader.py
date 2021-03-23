@@ -1,14 +1,38 @@
 class Reader:
-    def __init__(self, iterator):
-        self.iterator = iter(iterator)
-        self.curr = None
-        self.futu = next(self.iterator)
-        self.tofutu()
+    def __init__(self, script,n):
+        self.s = [iter(script) for i in range(n)]
+        self.p = [next(self.s[i]) for i in range(n)]
+        self.l = 0
 
-    def tofutu(self):
+        self.token = ''
+
+    def __str__(self):return " Token [|" + self.token+'|] p1 = '+self.p[1]
+    
+    def move(self, index, isadd = lambda x: False):
+        prev = self.p[index]
+        if(isadd(prev)): self.token += prev
+        if(prev == '\n'): self.l += 1
         try:
-            self.curr = self.futu
-            self.futu = next(self.iterator)
+            value = next(self.s[index])
+            self.p[index] = value
         except StopIteration:
-            self.futu = None
-        return self.curr, self.futu
+            value = None
+        
+        
+        #print(self)
+        return value
+
+    def movetil(self, index,cond, isadd = lambda x: False):
+        v = self.move(index,isadd)
+        if v == None: return 
+        while not cond(v):
+              v = self.move(index,isadd)
+              if v == None: return 
+        return v
+    def join(self, a, b, isadd = lambda x: True):
+        return self.movetil(a, lambda x: x== self.p[b], isadd)
+    
+    def clear(self): 
+        v = self.token
+        self.token = ''
+        return v

@@ -1,0 +1,17 @@
+if = {
+    cond: inner;
+    inner = {
+      a,b: inner(cond);
+      0:a;
+      1:b
+    };
+};
+if(cond)(a,b);
+if =  {b,c,d}:
+{
+    (0,c,d): c;
+    (1,c,d): d ;
+}
+if(cond,a,b);
+
+f i = g f i , 1;
