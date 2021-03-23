@@ -1,3 +1,12 @@
+s = {
+   :'aadaisydiuaydiuydaydydisuy';
+}
+ls a = {
+  i:i+1
+}
+fin = {
+  i: 
+}
 if = {
     cond: inner;
     inner = {
@@ -12,6 +21,23 @@ if =  {b,c,d}:
     (0,c,d): c;
     (1,c,d): d ;
 }
-if(cond,a,b);
 
-f i = g f i , 1;
+eq(a){
+  inner(b) = {
+    a: 1;
+    :;
+    i:0;
+  };
+  a: inner;
+}
+eq = {
+    a: inner;
+    b: add(b);
+    inner = {
+      a: 1;
+      : ;
+      i: 0;
+    }
+}
+#eq(a)(b)#
+#if(eq(a)(b))(a,b)#
