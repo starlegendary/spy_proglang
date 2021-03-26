@@ -7,6 +7,16 @@ ls a = {
 fin = {
   i: 
 }
+fib = {
+  y,x : add(y)(x), y;
+} -> fib y,x;
+
+fff = {
+    if(fff)
+    fib _ -> fib fib _;
+}
+
+fff fib
 if = {
     cond: inner;
     inner = {
@@ -30,6 +40,12 @@ eq(a){
   };
   a: inner;
 }
+
+add <- {
+  a, b -> a + b;
+  a -> fold a add
+}
+
 eq = {
     a: inner;
     b: add(b);

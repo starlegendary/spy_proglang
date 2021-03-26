@@ -1,7 +1,4 @@
-{  :'Hello World';};
-#print () hello world function#
-ls = {
-  '0':'12.1';
-  _:'23.2' == '2'-> '3';
+A <= {
+  _ -> 'hello world';
 };
-aaa
+A;

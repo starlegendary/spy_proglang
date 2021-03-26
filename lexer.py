@@ -13,7 +13,7 @@ def match(cond, sth = True):
 def Lexer(r):
     alltoken = []
     stop = True
-
+    allop = dict(map(lambda x: (x[0],x[1:]),['->','<-','=>','<=']))
     while(stop != None):
 
         #comment
@@ -33,13 +33,14 @@ def Lexer(r):
         elif has(':=')(r.p[1]):
             alltoken.append(('op',r.p[1]))
         #check default double operation ->
-        elif r.p[1] == '-':
-            r.move(1)
-            if(r.p[1] == '>'):
-                alltoken.append(('op','->'))
-                r.move(1)
-            else:
-                raise Exception ('Does not recognize -')
+        elif r.p[1] in allop:
+            for correct in allop[r.p[1]]:
+                curr = r.move(1,eq(True))
+                if(not (curr == correct)):
+                    raise Exception ('Cannot recognize', r.clear())
+            stop = r.move(1, eq(True))
+            alltoken.append(('op', r.clear()))
+            continue
         #check for functions
         elif match("[_a-zA-Z]")(r.p[1]):
             stop = r.movetil(1, match("[_a-zA-Z]", False), eq(True))

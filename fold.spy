@@ -1,3 +1,9 @@
+a = {
+  0:1;
+  1:2;
+  2:3;
+}
+_,b <- a;
 fold = {
   (f,i): inner(i);
   inner = {
@@ -5,5 +11,51 @@ fold = {
     (i): add(inner(i-1), f(i)) 
   };
 };
+fold = {
+    _ -> _ ;
+    a , f -> {
+      a -> /
+      f ->
+    } 
+}
+
+a ->{
+  0:1; 1:3; 2:5;
+}
+
+add <= x -> y -> x + y;
+concat <= x <= y -> x y;
+
+
+fold <= ls -> f -> {
+  _ -> f len ls; 
+  i -> f:i-1 + ls:i;
+}
+
+len <=  {
+  _ -> 0;
+  ls => ls0, ls1 -> 1 + len ls1;
+}
+
+slice <= ls <= {
+    _ -> ls;
+    i -> {
+      _ -> ls i;
+      i -> ls i;
+      j -> fold ls concat j;
+    }
+}
+
+
+
+len = {
+  f -> inner;
+  inner = {
+    _ -> f i
+    0 -> f 0;
+    i -> inner i - 1 + f i
+  }
+}
+
 
 aaa
